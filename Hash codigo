@@ -1,0 +1,47 @@
+using System;
+using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
+
+class Program
+{
+    static List<Usuario> usuarios = new List<Usuario>();
+
+    static void Main()
+    {
+        Usuario usuario = new Usuario();
+
+        Console.Write("Digite o nome: ");
+        usuario.Nome = Console.ReadLine();
+
+        Console.Write("Digite a senha: ");
+        string senha = Console.ReadLine();
+
+        usuario.SenhaHash = GerarHash(senha);
+
+        usuarios.Add(usuario);
+
+        Console.WriteLine("\nUsuário cadastrado!");
+
+        Console.WriteLine("\nHASH gerado:");
+        Console.WriteLine(usuario.SenhaHash);
+    }
+
+    static string GerarHash(string texto)
+    {
+        SHA256 sha256 = SHA256.Create();
+
+        byte[] bytes = sha256.ComputeHash(
+            Encoding.UTF8.GetBytes(texto)
+        );
+
+        StringBuilder sb = new StringBuilder();
+
+        foreach (byte b in bytes)
+        {
+            sb.Append(b.ToString("x2"));
+        }
+
+        return sb.ToString();
+    }
+}
